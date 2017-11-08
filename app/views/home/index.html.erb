@@ -1,0 +1,128 @@
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-3">VLYOP Registration Portal</h1>
+        <p class="lead">Place where you can learn and grow with the help of videos made by professionals.</p>
+        <a href="/studentRegister" class="btn btn-primary">Get Registered</a>
+    </div>
+</div>
+<div class="heading">
+    <h1>Registered Students</h1>
+</div>
+<div class="col-sm-6 col-sm-offset-3">
+    <div id="imaginary_container">
+        <label>Search Student: </label>
+        <input type="text" name="" id="searchBar" onkeyup="searchFilter(this.value)">
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <%= link_to 'Download as .csv', '/home/exportCSV.csv' ,class:"btn btn-primary csv"%>
+        </div>
+        <div class="col-sm-3">
+            <%= link_to 'Download as .csv 2', '/home/exportCSV2.csv' ,class:"btn btn-primary csv2"%>
+        </div>
+        <div class="col-sm-3">
+            <%= link_to 'Download as .xlsx', students_path(format: :xlsx),class:"btn btn-primary xls" %>
+        </div>
+        <div class="col-sm-3">
+            <%= link_to "Download (PDF)", download_PDF_path(:format => "pdf"),class:"btn btn-primary pdf" %>
+        </div>
+    </div>
+</div>
+<% @students.each do |s| %>
+    <div class="card" id="index" remote: true>
+        <div class="card-header">
+            <h4><%= s.name%></h4>
+        </div>
+        <div class="card-body">
+            <p class="card-title">
+                <%= s.email %>
+            </p>
+            <p class="card-text">
+                <%= s.course %>
+            </p>
+            <a href="#" class="btn btn-primary viewBtn" data-toggle="modal" data-target="#viewStudent" data-id="<%= s.id %>"> View </a>
+            <%= link_to 'Edit', edit_student_path(s), class:"btn btn-primary" %>
+                <%= link_to 'Delete',s, method: :delete , data: { confirm: 'Are you sure?' }, class:"btn btn-primary" %>
+                <%= link_to "Download Image", download_image_path(:image_params => s.avatar.path) ,class:"btn btn-primary "%>
+        </div>
+    </div>
+    <% end %>
+        <%= render 'home/view_student'%>
+            <script type="text/javascript">
+            var allStudents = JSON.parse(<%= @studentsJson.inspect.html_safe %>);
+
+            var allCountries = JSON.parse(<%= @countriesJson.inspect.html_safe %>);
+            var allStates = JSON.parse(<%= @statesJson.inspect.html_safe %>);
+            var allCities = JSON.parse(<%= @citiesJson.inspect.html_safe %>);
+
+            function searchFilter(val) {
+                val = val.toLowerCase();
+                var allCards = document.getElementsByClassName("card");
+                console.log(allCards[0].childNodes[1].innerText);
+                for (var i = 0; i < allCards.length; i++) {
+                    if (allCards[i].childNodes[1].innerText.toLowerCase().includes(val)) {
+                        allCards[i].style.display = "flex"
+                    } else {
+                        allCards[i].style.display = "none"
+                    }
+
+                }
+
+
+
+            }
+
+            var viewBtn = document.getElementsByClassName("viewBtn");
+            for (var i = 0; i < viewBtn.length; i++) {
+                viewBtn[i].addEventListener('click', viewBtnHandler);
+            }
+
+            function viewBtnHandler(event) {
+                var clickedId = event.srcElement.attributes[4].value;
+                var clickedStudent;
+                for (var i = 0; i < allStudents.length; i++) {
+                    if (allStudents[i].id == clickedId) {
+                        clickedStudent = allStudents[i];
+                        break;
+                    }
+                }
+                for (var i = 0; i < allCountries.length; i++) {
+                    if (allCountries[i].id == clickedStudent.country_id) {
+                        clickedStudent.country_id = allCountries[i].name;
+
+                        break;
+                    }
+                }
+                for (var i = 0; i < allStates.length; i++) {
+                    if (allStates[i].id == clickedStudent.state_id) {
+                        clickedStudent.state_id = allStates[i].name;
+                        break;
+                    }
+                }
+                for (var i = 0; i < allCities.length; i++) {
+                    if (allCities[i].id == clickedStudent.city_id) {
+                        clickedStudent.city_id = allCities[i].name;
+                        break;
+                    }
+                }
+
+
+                document.getElementById("name").innerHTML = clickedStudent.name;
+                document.getElementById("dob").innerHTML = clickedStudent.dob;
+                document.getElementById("email").innerHTML = clickedStudent.email;
+                document.getElementById("phone").innerHTML = clickedStudent.phone;
+                document.getElementById("country").innerHTML = clickedStudent.country_id;
+                document.getElementById("state").innerHTML = clickedStudent.state_id;
+                document.getElementById("city").innerHTML = clickedStudent.city_id;
+                document.getElementById("course").innerHTML = clickedStudent.course;
+
+
+
+
+
+
+
+            }
+            </script>

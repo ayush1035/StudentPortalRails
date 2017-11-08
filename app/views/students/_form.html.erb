@@ -1,0 +1,74 @@
+<div class="formDiv">
+    <h3 style="color: red;">
+        <% if flash[:alert] %>
+           
+                <%= flash[:alert] %>
+           
+        <% end %>
+    </h3>
+    <%= form_for @student ,html: { multipart: true }  do |f| %>
+        <div class="form-group">
+            <%= f.label :name %>
+                <br>
+                <%= f.text_field :name,class: "form-control" %>
+        </div>
+        <div class="form-group">
+            <%= f.label :dob %>
+                <br>
+                <%= f.date_field :dob,class: "form-control" %>
+        </div>
+        <div class="form-group">
+            <%= f.label :email %>
+                <br>
+                <%= f.email_field :email,class: "form-control" %>
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <%= f.label :phone %>
+                <br>
+                <%= f.number_field :phone,class: "form-control" %>
+        </div>
+        <div class="form-group">
+            <label for="country">Country</label>
+            <%=f.collection_select :country_id, Country.all, :id, :name,{},{:class=> "form-control",:onChange=>"getState(this.value)"}  %>
+        </div>
+        <div class="form-group">
+            <label for="state">State</label>
+            <br>
+            <select class="form-control" id="state" name="student[state_id]" onChange="getCity(this.value);">
+                <option selected>Choose...</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="city">City</label>
+            <br>
+            <select class="form-control" id="city" name="student[city_id]">
+                <option selected>Choose...</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <%= f.label :course %>
+                <br>
+                <%= f. select :course, ['Maths', 'Physics', 'Chemistry'],{}, {:class=> "form-control"}  %>
+                    </select>
+        </div>
+         <%if @create==true%>
+        <div class="form-group">
+            <%= f.label :avatar %>
+                <br>
+                <%= f.file_field :avatar,class: "form-control" %>
+        </div>
+        <%end%>
+        <div class="form-group">
+            <%= f.label :youtubeID %>
+                <br>
+                <%= f.text_field :youtubeID,class: "form-control" %>
+        </div>
+        <%if @edit==true%>
+            <iframe width="420" height="345" src="<%=@video%>">
+            </iframe>
+            <%end%>
+            <br>
+            <%= f.submit :class=>"btn btn-primary" %>
+                <% end %>
+</div>

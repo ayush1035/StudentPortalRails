@@ -1,0 +1,35 @@
+<h1 style="text-align: center;">All students</h1>
+<% @studentsPDF.each do |s| %>
+    <div class="pdff" id="index" remote: true>
+        <div class="card-header">
+            <h4><%= s.name%></h4>
+        </div>
+        <div class="card-body">
+           
+            <p class="card-title">
+                <label>Email:</label> <%= s.email %>
+            </p>
+             
+            <p class="card-title">
+                 <label>DOB : </label><%= s.dob %>
+            </p>
+            <p class="card-title">
+                 <label>Phone : </label><%= s.phone %>
+            </p>
+            <p class="card-title">
+                 <label>Country : </label><%= s.country.name %>
+            </p>
+            <p class="card-title">
+                 <label>State : </label><%= s.state.name%>
+            </p>
+            <p class="card-title">
+                 <label>City : </label><%= s.city.name %>
+            </p>
+            <p class="card-text">
+                <label>Course : </label> <%= s.course %>
+            </p>
+           
+        </div>
+    </div>
+    <div>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`</div>
+ <% end %>
